@@ -44,6 +44,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth") // Reemplaza con las dependencias que necesitas
     implementation("com.google.firebase:firebase-firestore") // Agrega Firestore si es necesario
     implementation ("com.google.firebase:firebase-analytics")
+    implementation ("com.google.firebase:firebase-database-ktx")
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
@@ -51,6 +52,7 @@ dependencies {
 
     implementation("com.google.android.gms:play-services-maps:19.0.0")
     implementation(libs.play.services.maps)
+    implementation(libs.firebase.database.ktx)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

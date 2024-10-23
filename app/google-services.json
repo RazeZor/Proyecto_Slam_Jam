@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "780778979298",
+    "project_id": "slamjam-f688f",
+    "storage_bucket": "slamjam-f688f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:780778979298:android:c7d1b53eae05afc57b03bb",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMjo83qE8jCA2so8MvNjQ7jxG-3U0sDpM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

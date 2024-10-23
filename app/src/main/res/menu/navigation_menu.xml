@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_ver_perfil"
+        android:title="Ver Perfil" />
+
+    <item
+        android:id="@+id/nav_crear_banda"
+        android:title="Crear Banda" />
+
+    <item
+        android:id="@+id/nav_ver_bandas"
+        android:title="Ver Bandas" />
+
+    <item
+        android:id="@+id/nav_cerrar_sesion"
+        android:title="Cerrar Sesión" />
+</menu>

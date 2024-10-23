@@ -2,15 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
-    tools:context=".RegistroActivity">
+    android:background="#000000"
+    tools:context=".Registro">
 
-    <!-- Título de la app -->
-
-    <!-- Campo de nombre -->
+    <!-- Título de la aplicación -->
     <TextView
         android:id="@+id/tvAppTitle"
         android:layout_width="wrap_content"
@@ -22,10 +20,10 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/etNombre"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Campo de Nombre -->
     <EditText
         android:id="@+id/etNombre"
         android:layout_width="0dp"
@@ -42,7 +40,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginTop="16dp"/>
 
-    <!-- Campo de apellido -->
+    <!-- Campo de Apellido -->
     <EditText
         android:id="@+id/etApellido"
         android:layout_width="0dp"
@@ -59,7 +57,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginTop="16dp"/>
 
-    <!-- Campo de correo -->
+    <!-- Campo de Correo -->
     <EditText
         android:id="@+id/etEmail"
         android:layout_width="0dp"
@@ -76,23 +74,19 @@
         android:layout_marginEnd="32dp"
         android:layout_marginTop="16dp"/>
 
-
-    <EditText
-        android:id="@+id/etDireccion"
-        android:layout_width="0dp"
+    <!-- Título de Instrumentos -->
+    <TextView
+        android:id="@+id/tvInstrumentos"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Dirección"
-        android:inputType="text"
-        android:backgroundTint="@android:color/white"
+        android:text="Instrumentos que tocas:"
         android:textColor="@android:color/white"
-        android:textColorHint="@android:color/darker_gray"
         app:layout_constraintTop_toBottomOf="@id/etEmail"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="32dp"/>
 
+    <!-- Campo de Descripción -->
     <EditText
         android:id="@+id/etDescripcion"
         android:layout_width="0dp"
@@ -102,37 +96,25 @@
         android:backgroundTint="@android:color/white"
         android:textColor="@android:color/white"
         android:textColorHint="@android:color/darker_gray"
-        app:layout_constraintTop_toBottomOf="@id/etDireccion"
+        app:layout_constraintTop_toBottomOf="@id/tvInstrumentos"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginTop="16dp"/>
 
-    <!-- Título de instrumentos -->
-    <TextView
-        android:id="@+id/tvInstrumentos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Instrumentos que tocas:"
-        android:textColor="@android:color/white"
-        app:layout_constraintTop_toBottomOf="@id/etDescripcion"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp"/>
-
-    <!-- Checkbox para guitarra -->
+    <!-- Checkbox para Guitarra -->
     <CheckBox
         android:id="@+id/checkboxGuitarra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Guitarra"
         android:textColor="@android:color/white"
-        app:layout_constraintTop_toBottomOf="@id/tvInstrumentos"
+        app:layout_constraintTop_toBottomOf="@id/etDescripcion"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="16dp"/>
 
-    <!-- Checkbox para bajo -->
+    <!-- Checkbox para Bajo -->
     <CheckBox
         android:id="@+id/checkboxBajo"
         android:layout_width="wrap_content"
@@ -143,7 +125,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="16dp"/>
 
-    <!-- Checkbox para batería -->
+    <!-- Checkbox para Batería -->
     <CheckBox
         android:id="@+id/checkboxBateria"
         android:layout_width="wrap_content"
@@ -154,7 +136,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="16dp"/>
 
-    <!-- Checkbox para teclado -->
+    <!-- Checkbox para Teclado -->
     <CheckBox
         android:id="@+id/checkboxTeclado"
         android:layout_width="wrap_content"
@@ -165,7 +147,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="16dp"/>
 
-    <!-- Checkbox para otro -->
+    <!-- Checkbox para Otro -->
     <CheckBox
         android:id="@+id/checkboxOtro"
         android:layout_width="wrap_content"
@@ -176,7 +158,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="16dp"/>
 
-    <!-- Input para especificar otro instrumento -->
+    <!-- Campo para especificar otro instrumento -->
     <EditText
         android:id="@+id/etOtroInstrumento"
         android:layout_width="0dp"
@@ -192,19 +174,17 @@
         android:layout_marginEnd="32dp"
         android:layout_marginTop="16dp"/>
 
-    <!-- Botón de registrarse -->
+    <!-- Botón de Registro -->
     <Button
-        android:id="@+id/btnRegistrarse"
+        android:id="@+id/btnRegistrar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Crear Perfil"
-        android:backgroundTint="@android:color/holo_red_dark"
+        android:text="Registrar"
+        android:background="@android:color/holo_red_dark"
         android:textColor="@android:color/white"
-        app:layout_constraintTop_toBottomOf="@id/etOtroInstrumento"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginTop="32dp"/>
+        app:layout_constraintTop_toBottomOf="@id/etOtroInstrumento"
+        android:layout_margin="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

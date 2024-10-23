@@ -19,11 +19,11 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        //val IniciarSesion = findViewById<Button>(R.id.btnIniciarSesion)
-        //IniciarSesion.setOnClickListener{
-            //val intent = intent(this,MAPAMAIN::class.java)
-            //startActivity(intent)
-        //}
+        val btnIniciarSesion = findViewById<Button>(R.id.btnIniciarSesion)
+        btnIniciarSesion.setOnClickListener{
+            val intent = Intent(this, MapaMain::class.java)
+            startActivity(intent)
+        }
 
         val btnRegistrarse = findViewById<Button>(R.id.btnRegistrarse)
         btnRegistrarse.setOnClickListener{

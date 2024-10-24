@@ -1,14 +1,28 @@
 package com.example.myapplication
 
+
 import android.content.Intent
+
+import android.Manifest
+import android.content.pm.PackageManager
+
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -21,14 +35,24 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.ktx.Firebase
 
 class MapaMain : AppCompatActivity(), OnMapReadyCallback {
+
     private lateinit var map: GoogleMap
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
+=======
+
+    private lateinit var map:GoogleMap /* integracion google maps*/
+
+    companion object{
+        const val REQUEST_CODE_LOCATION = 0 
+    }
+>>>>>>> Stashed changes
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_mapa_main)
+<<<<<<< Updated upstream
 
         // Inicializar el DrawerLayout y NavigationView
         drawerLayout = findViewById(R.id.drawer_layout)
@@ -79,13 +103,19 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun createFragment() {
+=======
+        createFragment()
+    }
+
+    private fun createFragment(){ /* cargar mapa */
+>>>>>>> Stashed changes
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
+    override fun onMapReady(googleMap: GoogleMap) { /* se llama cuando el mapa es creado */
         map = googleMap
-        createMarker()
+        createMarker() /* crea un marker en el mapa */
     }
 
     private fun createMarker() {
@@ -99,6 +129,7 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback {
         )
     }
 
+<<<<<<< Updated upstream
     // Método para abrir el menú
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -112,3 +143,30 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback {
 
 
 }
+=======
+    /*regresa true o false segun este el permiso de localizacion activado */
+    private fun isLocationPermissionGranted() = ContextCompat.checkSelfPermission(
+        this,
+        Manifest.permission.ACCESS_FINE_LOCATION
+    ) == PackageManager.PERMISSION_GRANTED
+
+    // Confirma si el mapa esta funcionando segun el permiso
+    private fun enableLocation(){
+        if (!::map.isInitialized) return
+        if (isLocationPermissionGranted()){
+            //si, corre el requestLocationPermission, osea que tiene permiso.
+            map.isMyLocationEnabled = true  //NO TOCAR, el "error" es solo el programa diciendo que usa el permiso.
+        }else{
+            //no, corre de nuevo el permiso
+            requestLocationPermission()
+        }
+    }
+    private fun requestLocationPermission(){
+        if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)){
+            Toast.makeText(this, "Ve a ajustes y acepta los permisos de Ubicacion", Toast.LENGTH_SHORT).show()
+        }else{
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE_LOCATION)
+        }
+    }
+}
+>>>>>>> Stashed changes

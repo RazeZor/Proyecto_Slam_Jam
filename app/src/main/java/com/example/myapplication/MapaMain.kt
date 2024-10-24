@@ -109,8 +109,9 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) { /* se llama cuando el mapa es creado */
-        map = googleMap
+        map = googleMap //mapa se cree
         createMarker() /* crea un marker en el mapa */
+        enableLocation() //activa la localizacion
     }
 
     private fun createMarker() {
@@ -133,7 +134,7 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback {
             super.onBackPressed()
         }
     }
-    
+
 
     /*regresa true o false segun este el permiso de localizacion activado */
     private fun isLocationPermissionGranted() = ContextCompat.checkSelfPermission(
@@ -143,20 +144,42 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback {
 
     // Confirma si el mapa esta funcionando segun el permiso
     private fun enableLocation(){
-        if (!::map.isInitialized) return
-        if (isLocationPermissionGranted()){
+        if (!::map.isInitialized) return //si el mapa no esta inicializado, chao
+        if (isLocationPermissionGranted()){ //si los permisos estan activos, activa la localizacion en tiempo real, si no...
             //si, corre el requestLocationPermission, osea que tiene permiso.
+            //NO TOCAR
             map.isMyLocationEnabled = true  //NO TOCAR, el "error" es solo el programa diciendo que usa el permiso.
+            //NO TOCAR
         }else{
             //no, corre de nuevo el permiso
             requestLocationPermission()
         }
     }
-    private fun requestLocationPermission(){
+    private fun requestLocationPermission(){// revisa los permisos
         if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)){
-            Toast.makeText(this, "Ve a ajustes y acepta los permisos de Ubicacion", Toast.LENGTH_SHORT).show()
-        }else{
+            Toast.makeText(this, "Ve a ajustes y acepta los permisos de Ubicacion", Toast.LENGTH_SHORT).show()//si rechazo los permisos, activalo tu
+        }else{//pedimos permisos de nuevo
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE_LOCATION)
+        }
+    }
+
+    //
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode){              //si no esta vacio y el permiso es de 0 esta aceptado, el permiso esta aceptado
+            REQUEST_CODE_LOCATION -> if (grantResults.isNotEmpty()&& grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                //NO TOCAR, el "error" es solo el programa diciendo que usa el permiso.
+                map.isMyLocationEnabled = true  //revisa si el permiso esta aceptado
+                //NO TOCAR
+            }else{// otra vez acepta el permiso dale dale no sea pavo
+                Toast.makeText(this, "Acepta los permisos en Ajustes para activar la localizacion", Toast.LENGTH_SHORT).show()
+            }
+            else -> {}
+
         }
     }
 }

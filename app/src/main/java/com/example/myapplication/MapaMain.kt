@@ -54,6 +54,8 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback {
                 }
                 R.id.nav_crear_banda -> {
                     // Acción al crear banda
+                    val intent = Intent(this@MapaMain, CrearBandaActivity::class.java)
+                    startActivity(intent)
                     Toast.makeText(this, "Crear Banda seleccionado", Toast.LENGTH_SHORT).show()
                     true
                 }

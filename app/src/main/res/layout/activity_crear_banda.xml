@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context=".CrearBandaActivity">
+
+    <!-- Campo para el nombre de la banda -->
+    <EditText
+        android:id="@+id/BandaNombre"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Nombre de la Banda"
+        android:inputType="textPersonName"
+        android:backgroundTint="@android:color/white"
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/darker_gray"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <!-- Campo para el género musical de la banda -->
+    <EditText
+        android:id="@+id/BandaGenero"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Género Musical"
+        android:inputType="text"
+        android:backgroundTint="@android:color/white"
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/darker_gray"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/BandaNombre"/>
+
+    <!-- Campo para la descripción de la banda -->
+    <EditText
+        android:id="@+id/BandaDescripcion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Descripción de la Banda"
+        android:inputType="textMultiLine"
+        android:backgroundTint="@android:color/white"
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/darker_gray"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/BandaGenero"/>
+
+    <!-- Botón para seleccionar una imagen -->
+    <Button
+        android:id="@+id/btnSeleccionarImagen"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Seleccionar Imagen"
+        android:backgroundTint="#FF0000"
+        android:textColor="#FFFFFF"
+        android:layout_margin="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/BandaDescripcion"/>
+
+    <!-- Botón para crear la banda -->
+    <Button
+        android:id="@+id/btnCrearBanda"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="#FF0000"
+        android:text="Crear Banda"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnSeleccionarImagen" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

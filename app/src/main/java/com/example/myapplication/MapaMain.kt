@@ -5,6 +5,7 @@ import android.content.Intent
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.location.Location
 
 import android.os.Bundle
 import android.widget.Toast
@@ -25,6 +26,7 @@ import androidx.fragment.app.FragmentManager
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
@@ -34,7 +36,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.ktx.Firebase
 
-class MapaMain : AppCompatActivity(), OnMapReadyCallback {
+class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClickListener,GoogleMap.OnMyLocationClickListener{
 
     private lateinit var map: GoogleMap
     private lateinit var drawerLayout: DrawerLayout
@@ -112,6 +114,8 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback {
         map = googleMap //mapa se cree
         createMarker() /* crea un marker en el mapa */
         enableLocation() //activa la localizacion
+        map.setOnMyLocationButtonClickListener(this) //LLama al boton de ubicarse
+        map.setOnMyLocationClickListener(this) //Llama al boton de tu ubicacion
     }
 
     private fun createMarker() {
@@ -181,6 +185,29 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback {
             else -> {}
 
         }
+    }
+    //Por algunos bugs, al desactivar los permisos mientras la app esta en uso u otros
+    override fun onResumeFragments() {
+        super.onResumeFragments()
+        if (!::map.isInitialized) return //si el mapa no esta inicializado, chao
+        if (!isLocationPermissionGranted()){
+            map.isMyLocationEnabled == false
+            Toast.makeText(this, "Acepta los permisos en Ajustes para activar la localizacion", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    //Controles boton de ubicacion
+    override fun onMyLocationButtonClick(): Boolean {
+        //Mensaje de prueba
+        //Toast.makeText(this, "Boton Pulsado", Toast.LENGTH_SHORT).show()
+        return false //en false, te lleva a tu ubicacion, el true se desactiva el boton
+    }
+
+    //Este metodo se llama cada vez que el usuario pulse su ubicacion
+    override fun onMyLocationClick(p0: Location) {
+
+        // Toast.makeText(this, "Esta es tu ubicacion: ${p0.latitude}, ${p0.longitude}", Toast.LENGTH_SHORT).show() //
+        Toast.makeText(this, "Este eres tu", Toast.LENGTH_SHORT).show()
     }
 }
 

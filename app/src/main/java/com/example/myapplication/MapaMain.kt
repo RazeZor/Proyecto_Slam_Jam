@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -15,9 +16,11 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.ktx.Firebase
 
 class MapaMain : AppCompatActivity(), OnMapReadyCallback {
-
     private lateinit var map: GoogleMap
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
@@ -44,8 +47,9 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback {
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_ver_perfil -> {
-                    // Acción al ver perfil
-                    Toast.makeText(this, "Ver Perfil seleccionado", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this@MapaMain, PerfilActivity::class.java)
+                    startActivity(intent)
+                    Toast.makeText(this, "Ver perfil", Toast.LENGTH_SHORT).show()
                     true
                 }
                 R.id.nav_crear_banda -> {
@@ -59,11 +63,13 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback {
                     true
                 }
                 R.id.nav_cerrar_sesion -> {
-                    // Acción para cerrar sesión
-                    Toast.makeText(this, "Cerrar Sesión seleccionado", Toast.LENGTH_SHORT).show()
+                    FirebaseAuth.getInstance().signOut()
+                    val intente = Intent(this@MapaMain,MainActivity::class.java)
+                    Toast.makeText(this, "Cerrando Sesion", Toast.LENGTH_SHORT).show()
+                    startActivity(intente)
                     true
                 }
-                else -> false
+                else -> super.onOptionsItemSelected(menuItem)
             }
         }
 
@@ -99,4 +105,8 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback {
             super.onBackPressed()
         }
     }
+
+
+
+
 }

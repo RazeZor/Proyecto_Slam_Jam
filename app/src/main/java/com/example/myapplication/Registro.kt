@@ -177,6 +177,11 @@ class Registro : AppCompatActivity() {
                     userMap["descripcion"] = descripcion
                     userMap["instrumentos"] = instrumentos // Guardar los instrumentos como un array
                     userMap["buscar"] = nombre.lowercase()
+                    userMap["fotoPerfil"] = "" // la usare mas adelante
+                    userMap["ubicacion"] = mapOf(
+                        "latitud" to 0.0, // Valor inicial
+                        "longitud" to 0.0  // Valor inicial
+                    )
 
                     // Guardar en Firebase Realtime Database
                     reference.setValue(userMap).addOnCompleteListener { saveTask ->

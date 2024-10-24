@@ -7,10 +7,12 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
 
 class MainActivity : AppCompatActivity() {
 
+    var FireBaseUser : FirebaseUser?=null
     private lateinit var etEmail : EditText
     private lateinit var etPassword : EditText
     private lateinit var btnIniciarSesion: Button
@@ -72,6 +74,22 @@ class MainActivity : AppCompatActivity() {
             .addOnFailureListener { e ->
                 Toast.makeText(applicationContext, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+    }
+    private fun ComprobarSesion(){
+        FireBaseUser = FirebaseAuth.getInstance().currentUser
+        if (FireBaseUser!=null){
+            val intent = Intent(this@MainActivity,MapaMain::class.java)
+            Toast.makeText(this, "la Sesion Esta Activa ", Toast.LENGTH_SHORT).show()
+            startActivity(intent)
+            finish()
+
+        }
+
+
+    }
+    private fun OnStart(){
+        ComprobarSesion()
+        super.onStart()
     }
 
 }

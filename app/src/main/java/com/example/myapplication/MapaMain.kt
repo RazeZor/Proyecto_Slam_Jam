@@ -39,20 +39,20 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
-=======
 
-    private lateinit var map:GoogleMap /* integracion google maps*/
+
+
 
     companion object{
         const val REQUEST_CODE_LOCATION = 0 
     }
->>>>>>> Stashed changes
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_mapa_main)
-<<<<<<< Updated upstream
+
 
         // Inicializar el DrawerLayout y NavigationView
         drawerLayout = findViewById(R.id.drawer_layout)
@@ -102,13 +102,8 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback {
         createFragment()
     }
 
-    private fun createFragment() {
-=======
-        createFragment()
-    }
-
     private fun createFragment(){ /* cargar mapa */
->>>>>>> Stashed changes
+
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
@@ -129,7 +124,7 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback {
         )
     }
 
-<<<<<<< Updated upstream
+
     // Método para abrir el menú
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -138,12 +133,8 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback {
             super.onBackPressed()
         }
     }
+    
 
-
-
-
-}
-=======
     /*regresa true o false segun este el permiso de localizacion activado */
     private fun isLocationPermissionGranted() = ContextCompat.checkSelfPermission(
         this,
@@ -169,4 +160,5 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 }
->>>>>>> Stashed changes
+
+

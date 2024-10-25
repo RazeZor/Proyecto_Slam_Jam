@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/buscador"
+        android:title="Buscar Personas "
+        android:icon="@android:drawable/ic_menu_view"
+        android:showAsAction="ifRoom"
+        android:actionLayout="@layout/custom_menu_item"
+        tools:ignore="AppCompatResource" />
     <item
         android:id="@+id/nav_ver_perfil"
         android:title="Ver Perfil"

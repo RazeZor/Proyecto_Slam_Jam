@@ -4,6 +4,7 @@ package com.example.myapplication
 import android.content.Intent
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Location
 
@@ -23,6 +24,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -52,6 +55,10 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClic
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Inicializa el cliente de ubicación
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
         enableEdgeToEdge()
         setContentView(R.layout.activity_mapa_main)
 
@@ -112,21 +119,45 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClic
 
     override fun onMapReady(googleMap: GoogleMap) { /* se llama cuando el mapa es creado */
         map = googleMap //mapa se cree
-        createMarker() /* crea un marker en el mapa */
+        //createMarker() /* crea un marker en el mapa */
         enableLocation() //activa la localizacion
         map.setOnMyLocationButtonClickListener(this) //LLama al boton de ubicarse
         map.setOnMyLocationClickListener(this) //Llama al boton de tu ubicacion
-    }
 
-    private fun createMarker() {
-        val coordinates = LatLng(-36.827132, -73.050156)
-        val marker = MarkerOptions().position(coordinates).title("Tu ubicación")
-        map.addMarker(marker)
-        map.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(coordinates, 18f),
-            5000,
-            null
-        )
+        // Llama a la función para mover la cámara a la ubicación actual
+        moveToCurrentLocation()
+    }
+// Comentado el marker para que no moleste
+//    private fun createMarker() {
+//        val coordinates = LatLng(-36.827132, -73.050156)
+//        val marker = MarkerOptions().position(coordinates).title("Tu ubicación")
+//        map.addMarker(marker)
+//        map.animateCamera(
+//            CameraUpdateFactory.newLatLngZoom(coordinates, 18f),
+//            5000,
+//            null
+//        )
+//    }
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    @SuppressLint("MissingPermission")//le quito la alerta de permisos
+    private fun moveToCurrentLocation() {
+        if (isLocationPermissionGranted()) { // Verifica si el permiso está concedido
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                location?.let {
+                    val coordinates = LatLng(it.latitude, it.longitude)
+                    map.animateCamera(
+                        CameraUpdateFactory.newLatLngZoom(coordinates, 18f),
+                        1000, // Duración de 1 segundo para la animación
+                        null
+                    )
+                } ?: Toast.makeText(this, "No se pudo obtener la ubicación actual", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            // Si no tiene el permiso, lo solicita
+            requestLocationPermission()
+        }
     }
 
 
@@ -174,18 +205,26 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClic
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when(requestCode){              //si no esta vacio y el permiso es de 0 esta aceptado, el permiso esta aceptado
-            REQUEST_CODE_LOCATION -> if (grantResults.isNotEmpty()&& grantResults[0]==PackageManager.PERMISSION_GRANTED){
-                //NO TOCAR, el "error" es solo el programa diciendo que usa el permiso.
-                map.isMyLocationEnabled = true  //revisa si el permiso esta aceptado
-                //NO TOCAR
-            }else{// otra vez acepta el permiso dale dale no sea pavo
-                Toast.makeText(this, "Acepta los permisos en Ajustes para activar la localizacion", Toast.LENGTH_SHORT).show()
-            }
-            else -> {}
 
+        // Verifica si el resultado es para el código de solicitud de ubicación
+        if (requestCode == REQUEST_CODE_LOCATION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permiso concedido: habilita la ubicación en el mapa y mueve la cámara
+                if (::map.isInitialized) {
+                    map.isMyLocationEnabled = true  // Habilita la ubicación en el mapa
+                    moveToCurrentLocation()         // Mueve la cámara a la ubicación actual
+                }
+            } else {
+                // Permiso denegado: muestra un mensaje al usuario
+                Toast.makeText(
+                    this,
+                    "Acepta los permisos en Ajustes para activar la localización",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
+
     //Por algunos bugs, al desactivar los permisos mientras la app esta en uso u otros
     override fun onResumeFragments() {
         super.onResumeFragments()
@@ -203,12 +242,20 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClic
         return false //en false, te lleva a tu ubicacion, el true se desactiva el boton
     }
 
-    //Este metodo se llama cada vez que el usuario pulse su ubicacion
-    override fun onMyLocationClick(p0: Location) {
+    // Este método se llama cada vez que el usuario pulse en su ubicación
+    override fun onMyLocationClick(location: Location) {
+        // Mover y hacer zoom instantáneamente a la ubicación actual
+        val coordinates = LatLng(location.latitude, location.longitude)
+        map.animateCamera(
+            CameraUpdateFactory.newLatLngZoom(coordinates, 18f),
+            10000, // Duración de 1 segundo para hacer la transición
+            null
+        )
 
-        // Toast.makeText(this, "Esta es tu ubicacion: ${p0.latitude}, ${p0.longitude}", Toast.LENGTH_SHORT).show() //
-        Toast.makeText(this, "Este eres tu", Toast.LENGTH_SHORT).show()
+        // Mensaje opcional
+        Toast.makeText(this, "Este eres tú", Toast.LENGTH_SHORT).show()
     }
+
 }
 
 

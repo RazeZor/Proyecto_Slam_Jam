@@ -1,7 +1,9 @@
 package com.example.myapplication
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +19,7 @@ class PerfilActivity : AppCompatActivity() {
     private lateinit var tvInstrumentos: TextView
     private lateinit var auth: FirebaseAuth
     private lateinit var reference: DatabaseReference
+    private lateinit var BtnEditar:Button
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +32,7 @@ class PerfilActivity : AppCompatActivity() {
         tvDescripcion = findViewById(R.id.Descripcion)
         tvInstrumentos = findViewById(R.id.instrumentos)
         auth = FirebaseAuth.getInstance()
+        BtnEditar = findViewById(R.id.editar)
 
         // Obtener el ID del usuario actual
         val id = auth.currentUser?.uid
@@ -57,12 +61,23 @@ class PerfilActivity : AppCompatActivity() {
                     }
                 }
 
+
+
+
+
+
                 override fun onCancelled(error: DatabaseError) {
                     Toast.makeText(this@PerfilActivity, "Error al cargar los datos", Toast.LENGTH_SHORT).show()
                 }
             })
         } else {
             Toast.makeText(this, "No se ha iniciado sesión", Toast.LENGTH_SHORT).show()
+        }
+
+        val BtnEditar = findViewById<Button>(R.id.editar)
+        BtnEditar.setOnClickListener{
+            val intent = Intent(this,EditarPerfil::class.java)
+            startActivity(intent)
         }
     }
 }

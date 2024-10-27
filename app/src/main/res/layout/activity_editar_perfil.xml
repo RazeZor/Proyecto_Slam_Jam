@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Campo para Nombre -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nombre"
+        android:textSize="16sp"
+        android:textColor="#000000"/>
+    <EditText
+        android:id="@+id/etNombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Ingrese su nombre  si desea cambiarlo"/>
+
+    <!-- Campo para Apellido -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Apellido "
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:layout_marginTop="8dp"/>
+    <EditText
+        android:id="@+id/etApellido"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Ingrese su apellido si desea cambiarlo"/>
+
+    <!-- Campo para Descripción -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Descripción"
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:layout_marginTop="8dp"/>
+    <EditText
+        android:id="@+id/etDescripcion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="agrega una nueva descripcion"/>
+
+    <!-- Selección de Instrumentos -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Instrumentos"
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:layout_marginTop="16dp"/>
+
+    <CheckBox
+        android:id="@+id/checkboxGuitarra"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Guitarra"/>
+
+    <CheckBox
+        android:id="@+id/checkboxBajo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bajo"/>
+
+    <CheckBox
+        android:id="@+id/checkboxBateria"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Batería"/>
+
+    <CheckBox
+        android:id="@+id/checkboxTeclado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Teclado"/>
+
+    <CheckBox
+        android:id="@+id/checkboxOtro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Otro"/>
+
+    <!-- Campo adicional para otro instrumento -->
+    <EditText
+        android:id="@+id/etOtroInstrumento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Especifique otro instrumento"
+        android:layout_marginTop="4dp"
+        android:visibility="gone"/>
+
+    <!-- Botón para Guardar Cambios -->
+    <Button
+        android:id="@+id/btnGuardar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Guardar Cambios"
+        android:backgroundTint="#6200EE"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout>

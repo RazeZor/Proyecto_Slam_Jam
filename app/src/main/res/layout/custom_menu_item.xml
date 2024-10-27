@@ -3,12 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/black"
-    android:orientation="vertical">
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <SearchView
+        android:id="@+id/search_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:iconifiedByDefault="false"
+        android:queryHint="Buscar Personas"
+        android:background="@android:color/black"
+        android:queryBackground="@android:color/black" />
 
     <TextView
         android:id="@+id/menu_item_text"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
-        android:padding="16dp"/>
+        android:padding="16dp" />
 </LinearLayout>

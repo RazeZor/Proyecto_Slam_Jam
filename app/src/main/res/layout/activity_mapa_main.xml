@@ -23,7 +23,8 @@
             app:title="Slam Jam"
             app:titleTextColor="@android:color/white"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints">
+        </androidx.appcompat.widget.Toolbar>
 
         <!-- Fragmento que contiene el mapa -->
         <fragment
@@ -45,6 +46,4 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:menu="@menu/navigation_menu"/>
-
 </androidx.drawerlayout.widget.DrawerLayout>
-

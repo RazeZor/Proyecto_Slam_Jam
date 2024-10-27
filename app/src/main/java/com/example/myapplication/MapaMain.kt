@@ -42,9 +42,6 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClic
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
 
-
-
-
     companion object{
         const val REQUEST_CODE_LOCATION = 0 
     }
@@ -87,6 +84,8 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClic
                 }
                 R.id.nav_ver_bandas -> {
                     // Acción para ver bandas
+                    val intent = Intent(this@MapaMain, VerBandaActivity::class.java)
+                    startActivity(intent)
                     Toast.makeText(this, "Ver Bandas seleccionado", Toast.LENGTH_SHORT).show()
                     true
                 }

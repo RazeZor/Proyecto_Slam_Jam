@@ -1,20 +1,28 @@
 package com.example.myapplication
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 
 class VerBandaActivity : AppCompatActivity() {
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var reference: DatabaseReference
+    private lateinit var bandaList: MutableList<Banda>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_ver_banda)
-        //ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            //val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            //v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            //insets
-        }
+
+
+
     }
 
+
+}

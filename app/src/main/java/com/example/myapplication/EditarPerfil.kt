@@ -32,16 +32,7 @@ class EditarPerfil : AppCompatActivity() {
         reference = FirebaseDatabase.getInstance().getReference("Usuario").child(id!!)
 
         // Inicializar vistas
-        etNombre = findViewById(R.id.etNombre)
-        etApellido = findViewById(R.id.etApellido)
-        etDescripcion = findViewById(R.id.etDescripcion)
-        checkboxGuitarra = findViewById(R.id.checkboxGuitarra)
-        checkboxBajo = findViewById(R.id.checkboxBajo)
-        checkboxBateria = findViewById(R.id.checkboxBateria)
-        checkboxTeclado = findViewById(R.id.checkboxTeclado)
-        checkboxOtro = findViewById(R.id.checkboxOtro)
-        etOtroInstrumento = findViewById(R.id.etOtroInstrumento)
-        btnGuardar = findViewById(R.id.btnGuardar)
+        inicializarVaribles()
 
         // Cargar datos existentes
         cargarDatos()
@@ -68,7 +59,20 @@ class EditarPerfil : AppCompatActivity() {
                 checkboxOtro.isChecked = true
                 etOtroInstrumento.setText(instrumentos.find { it !in listOf("Guitarra", "Bajo", "Batería", "Teclado") })
             }
+
         }
+    }
+    private fun inicializarVaribles(){
+        etNombre = findViewById(R.id.etNombre)
+        etApellido = findViewById(R.id.etApellido)
+        etDescripcion = findViewById(R.id.etDescripcion)
+        checkboxGuitarra = findViewById(R.id.checkboxGuitarra)
+        checkboxBajo = findViewById(R.id.checkboxBajo)
+        checkboxBateria = findViewById(R.id.checkboxBateria)
+        checkboxTeclado = findViewById(R.id.checkboxTeclado)
+        checkboxOtro = findViewById(R.id.checkboxOtro)
+        etOtroInstrumento = findViewById(R.id.etOtroInstrumento)
+        btnGuardar = findViewById(R.id.btnGuardar)
     }
 
     private fun guardarCambios() {

@@ -34,7 +34,6 @@ class RecuperarPassword : AppCompatActivity() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(this, "Se ha enviado un correo para restablecer la contraseña", Toast.LENGTH_SHORT).show()
-                    // Puedes navegar a otra actividad o volver a la pantalla de inicio
                 } else {
                     Toast.makeText(this, "Error al enviar el correo: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }

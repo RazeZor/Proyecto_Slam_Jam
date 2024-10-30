@@ -110,16 +110,16 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClic
         // Listener para detectar cambios en la ubicación de otros usuarios
         database.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                updateOrAddUserMarker(snapshot)
+                ActualizarUbicacionDeLosDemas(snapshot)
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                updateOrAddUserMarker(snapshot)
+                ActualizarUbicacionDeLosDemas(snapshot)
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
                 val userId = snapshot.key
-                userMarkers[userId]?.remove() // Remueve el marker si el usuario se desconecta
+                userMarkers[userId]?.remove()
                 userMarkers.remove(userId)
             }
 
@@ -131,7 +131,7 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClic
         })
     }
 
-    private fun updateOrAddUserMarker(snapshot: DataSnapshot) {
+    private fun ActualizarUbicacionDeLosDemas(snapshot: DataSnapshot) {
         val userId = snapshot.key ?: return
         val lat = snapshot.child("ubicacion/latitud").getValue(Double::class.java) ?: return
         val lng = snapshot.child("ubicacion/longitud").getValue(Double::class.java) ?: return

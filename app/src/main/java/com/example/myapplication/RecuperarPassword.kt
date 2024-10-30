@@ -1,5 +1,4 @@
 package com.example.myapplication
-
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText

@@ -38,22 +38,26 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
-class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClickListener,GoogleMap.OnMyLocationClickListener{
+import com.google.android.gms.maps.model.Marker // Agrega este import si no está
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+
+class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
 
     private lateinit var map: GoogleMap
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
+    private val markersMap = mutableMapOf<String, Marker>() // Mapa para almacenar marcadores de usuarios
 
-    companion object{
+    companion object {
         const val REQUEST_CODE_LOCATION = 0
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_mapa_main)
-
 
         // Inicializar el DrawerLayout y NavigationView
         drawerLayout = findViewById(R.id.drawer_layout)
@@ -78,14 +82,12 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClic
                     true
                 }
                 R.id.nav_crear_banda -> {
-                    // Acción al crear banda
                     val intent = Intent(this@MapaMain, CrearBandaActivity::class.java)
                     startActivity(intent)
                     Toast.makeText(this, "Crear Banda seleccionado", Toast.LENGTH_SHORT).show()
                     true
                 }
                 R.id.nav_ver_bandas -> {
-                    // Acción para ver bandas
                     val intent = Intent(this@MapaMain, VerBandaActivity::class.java)
                     startActivity(intent)
                     Toast.makeText(this, "Ver Bandas seleccionado", Toast.LENGTH_SHORT).show()
@@ -93,114 +95,115 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClic
                 }
                 R.id.nav_cerrar_sesion -> {
                     FirebaseAuth.getInstance().signOut()
-                    val intente = Intent(this@MapaMain,MainActivity::class.java)
+                    val intent = Intent(this@MapaMain, MainActivity::class.java)
                     Toast.makeText(this, "Cerrando Sesion", Toast.LENGTH_SHORT).show()
-                    startActivity(intente)
+                    startActivity(intent)
                     true
                 }
                 else -> super.onOptionsItemSelected(menuItem)
             }
         }
-
+        setupRealtimeLocationListener()
         createFragment()
     }
 
-    private fun createFragment(){ /* cargar mapa */
-
+    private fun createFragment() {
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
 
-    override fun onMapReady(googleMap: GoogleMap) { /* se llama cuando el mapa es creado */
-        map = googleMap //mapa se cree
-        //createMarker() /* crea un marker en el mapa */
-        enableLocation() //activa la localizacion
-        map.setOnMyLocationButtonClickListener(this) //LLama al boton de ubicarse
-        map.setOnMyLocationClickListener(this) //Llama al boton de tu ubicacion
+    override fun onMapReady(googleMap: GoogleMap) {
+        map = googleMap
+        enableLocation()
+        map.setOnMyLocationButtonClickListener(this)
+        map.setOnMyLocationClickListener(this)
     }
 
-//    private fun createMarker() {
-//        val coordinates = LatLng(-36.827132, -73.050156)
-//        val marker = MarkerOptions().position(coordinates).title("Tu ubicación")
-//        map.addMarker(marker)
-//        map.animateCamera(
-//            CameraUpdateFactory.newLatLngZoom(coordinates, 18f),
-//            5000,
-//            null
-//        )
-//    }
-
-
-    // Método para abrir el menú
-    override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
+    private fun enableLocation() {
+        if (!::map.isInitialized) return
+        if (isLocationPermissionGranted()) {
+            map.isMyLocationEnabled = true
         } else {
-            super.onBackPressed()
+            requestLocationPermission()
         }
     }
 
+    private fun setupRealtimeLocationListener() {
+        val database = FirebaseDatabase.getInstance()
+        val usersRef = database.reference.child("Usuario")
 
-    /*regresa true o false segun este el permiso de localizacion activado */
+        usersRef.addChildEventListener(object : ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                updateUserLocation(snapshot)
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                updateUserLocation(snapshot)
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+                val userId = snapshot.key ?: return
+                markersMap[userId]?.remove()
+                markersMap.remove(userId)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@MapaMain, "Error al cargar ubicaciones", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+        })
+    }
+
+    private fun updateUserLocation(snapshot: DataSnapshot) {
+        val userId = snapshot.key ?: return
+        val nombre = snapshot.child("nombre").getValue(String::class.java) ?: return
+        val locationData = snapshot.child("ubicacion")
+        val lat = locationData.child("latitud").getValue(Double::class.java)
+        val lng = locationData.child("longitud").getValue(Double::class.java)
+
+        if (lat != null && lng != null) {
+            val location = LatLng(lat, lng)
+            val marker = markersMap[userId]
+
+            if (marker == null) {
+                markersMap[userId] = map.addMarker(
+                    MarkerOptions().position(location).title(nombre)
+                )!!
+            } else {
+                marker.position = location
+                marker.title = nombre
+            }
+        }
+    }
+
     private fun isLocationPermissionGranted() = ContextCompat.checkSelfPermission(
         this,
         Manifest.permission.ACCESS_FINE_LOCATION
     ) == PackageManager.PERMISSION_GRANTED
 
-    // Confirma si el mapa esta funcionando segun el permiso
-    private fun enableLocation() {
-        if (!::map.isInitialized) return //si el mapa no esta inicializado, chao
-        if (isLocationPermissionGranted()){ //si los permisos estan activos, activa la localizacion en tiempo real, si no...
-            //si, corre el requestLocationPermission, osea que tiene permiso.
-            //NO TOCAR
-            map.isMyLocationEnabled = true  //NO TOCAR, el "error" es solo el programa diciendo que usa el permiso.
-            //NO TOCAR
-        }else{
-            //no, corre de nuevo el permiso
-            requestLocationPermission()
-        }
-    }
-    private fun requestLocationPermission(){// revisa los permisos
-        if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)){
-            Toast.makeText(this, "Ve a ajustes y acepta los permisos de Ubicacion", Toast.LENGTH_SHORT).show()//si rechazo los permisos, activalo tu
-        }else{//pedimos permisos de nuevo
+    private fun requestLocationPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            Toast.makeText(this, "Ve a ajustes y acepta los permisos de Ubicacion", Toast.LENGTH_SHORT).show()
+        } else {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE_LOCATION)
         }
     }
 
-    //
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when(requestCode){              //si no esta vacio y el permiso es de 0 esta aceptado, el permiso esta aceptado
-            REQUEST_CODE_LOCATION -> if (grantResults.isNotEmpty()&& grantResults[0]==PackageManager.PERMISSION_GRANTED){
-                //NO TOCAR, el "error" es solo el programa diciendo que usa el permiso.
-                map.isMyLocationEnabled = true  //revisa si el permiso esta aceptado
-                //NO TOCAR
-            }else{// otra vez acepta el permiso dale dale no sea pavo
-                Toast.makeText(this, "Acepta los permisos en Ajustes para activar la localizacion", Toast.LENGTH_SHORT).show()
-            }
-            else -> {}
-
-        }
-    }
-    //Por algunos bugs, al desactivar los permisos mientras la app esta en uso u otros
-    override fun onResumeFragments() {
-        super.onResumeFragments()
-        if (!::map.isInitialized) return //si el mapa no esta inicializado, chao
-        if (!isLocationPermissionGranted()){
-            map.isMyLocationEnabled == false
+        if (requestCode == REQUEST_CODE_LOCATION && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            map.isMyLocationEnabled = true
+        } else {
             Toast.makeText(this, "Acepta los permisos en Ajustes para activar la localizacion", Toast.LENGTH_SHORT).show()
         }
     }
 
-
-    override fun onMyLocationButtonClick(): Boolean {
-        return false
-    }
+    override fun onMyLocationButtonClick(): Boolean = false
 
     override fun onMyLocationClick(location: Location) {
         GuardarUbicacionEnBd(location)
@@ -208,16 +211,13 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClic
         Toast.makeText(this, "Ubicación guardada: ${location.latitude}, ${location.longitude}", Toast.LENGTH_SHORT).show()
     }
 
-    fun GuardarUbicacionEnBd(location: Location) {
+    private fun GuardarUbicacionEnBd(location: Location) {
         val lat = location.latitude
         val lng = location.longitude
-
-        // Obtiene la referencia a la base de datos
         val database = FirebaseDatabase.getInstance()
         val userId = FirebaseAuth.getInstance().currentUser?.uid
 
         if (userId != null) {
-            // Crea el mapa con los valores actualizados de latitud y longitud
             val userLocationMap = mapOf(
                 "latitud" to lat,
                 "longitud" to lng
@@ -234,7 +234,4 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClic
             Toast.makeText(this, "Usuario no autenticado", Toast.LENGTH_SHORT).show()
         }
     }
-
 }
-
-

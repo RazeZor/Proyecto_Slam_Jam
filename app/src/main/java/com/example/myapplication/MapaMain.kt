@@ -45,7 +45,7 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClic
     private lateinit var navigationView: NavigationView
 
     companion object{
-        const val REQUEST_CODE_LOCATION = 0 
+        const val REQUEST_CODE_LOCATION = 0
     }
 
 
@@ -113,22 +113,22 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClic
 
     override fun onMapReady(googleMap: GoogleMap) { /* se llama cuando el mapa es creado */
         map = googleMap //mapa se cree
-        createMarker() /* crea un marker en el mapa */
+        //createMarker() /* crea un marker en el mapa */
         enableLocation() //activa la localizacion
         map.setOnMyLocationButtonClickListener(this) //LLama al boton de ubicarse
         map.setOnMyLocationClickListener(this) //Llama al boton de tu ubicacion
     }
 
-    private fun createMarker() {
-        val coordinates = LatLng(-36.827132, -73.050156)
-        val marker = MarkerOptions().position(coordinates).title("Tu ubicación")
-        map.addMarker(marker)
-        map.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(coordinates, 18f),
-            5000,
-            null
-        )
-    }
+//    private fun createMarker() {
+//        val coordinates = LatLng(-36.827132, -73.050156)
+//        val marker = MarkerOptions().position(coordinates).title("Tu ubicación")
+//        map.addMarker(marker)
+//        map.animateCamera(
+//            CameraUpdateFactory.newLatLngZoom(coordinates, 18f),
+//            5000,
+//            null
+//        )
+//    }
 
 
     // Método para abrir el menú

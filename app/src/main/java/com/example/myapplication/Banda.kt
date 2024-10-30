@@ -1,8 +1,10 @@
+package com.example.myapplication
+
 data class Banda(
-    val id: String = "",
-    val userId: String = "",
-    val nombre: String = "",
+    val idBanda: String = "",
+    val lider: String = "",
+    val nombreBanda: String = "",
     val genero: String = "",
     val descripcion: String = "",
-    val integrantes: List<String> = listOf()
+    val integrantes: List<String> = emptyList()
 )

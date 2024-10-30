@@ -44,11 +44,11 @@ class CrearBandaActivity : AppCompatActivity() {
             hayErrores = true
         }
         if (genero.isEmpty()) {
-            Toast.makeText(applicationContext, "Ingrese el genero que toca su banda", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "Ingrese el género que toca su banda", Toast.LENGTH_SHORT).show()
             hayErrores = true
         }
         if (descripcion.isEmpty()) {
-            Toast.makeText(applicationContext, "Ingrese la descripcion de su banda", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "Ingrese la descripción de su banda", Toast.LENGTH_SHORT).show()
             hayErrores = true
         }
 
@@ -60,19 +60,13 @@ class CrearBandaActivity : AppCompatActivity() {
     private fun registrarBanda(nombre: String, genero: String, descripcion: String) {
         val bandaId = reference.push().key // Generar un ID único para la banda
         val userId = auth.currentUser?.uid
-        val integrantes = mutableListOf<String>() // Inicialmente vacío, luego puedes agregar usuarios
+        val integrantes = mutableListOf<String>() // Inicialmente esta vacío, luego puedes agregar usuarios
 
         if (bandaId != null && userId != null) {
-            val userMap = HashMap<String, Any>()
-            userMap["IdBanda"] = bandaId
-            userMap["Lider"] = userId
-            userMap["NombreBanda"] = nombre
-            userMap["Genero"] = genero
-            userMap["descripcionDeBanda"] = descripcion
-            userMap["integrantes"] = integrantes
+            val banda = Banda(bandaId, userId, nombre, genero, descripcion, integrantes)
 
             // Guardar la banda en Firebase
-            reference.child(bandaId).setValue(userMap).addOnCompleteListener { task ->
+            reference.child(bandaId).setValue(banda).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(this, "Banda creada exitosamente", Toast.LENGTH_SHORT).show()
                 } else {
@@ -85,7 +79,7 @@ class CrearBandaActivity : AppCompatActivity() {
     }
 
     private fun seleccionarFoto() {
-        TODO("Not yet implemented")
+        // Implementar selección de imagen
     }
 
     private fun IniciarVariables() {

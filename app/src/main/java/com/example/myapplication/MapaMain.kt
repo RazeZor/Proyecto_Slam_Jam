@@ -34,6 +34,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
 class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClickListener,GoogleMap.OnMyLocationClickListener{
@@ -146,7 +148,7 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClic
     ) == PackageManager.PERMISSION_GRANTED
 
     // Confirma si el mapa esta funcionando segun el permiso
-    private fun enableLocation(){
+    private fun enableLocation() {
         if (!::map.isInitialized) return //si el mapa no esta inicializado, chao
         if (isLocationPermissionGranted()){ //si los permisos estan activos, activa la localizacion en tiempo real, si no...
             //si, corre el requestLocationPermission, osea que tiene permiso.
@@ -195,19 +197,44 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClic
         }
     }
 
-    //Controles boton de ubicacion
+
     override fun onMyLocationButtonClick(): Boolean {
-        //Mensaje de prueba
-        //Toast.makeText(this, "Boton Pulsado", Toast.LENGTH_SHORT).show()
-        return false //en false, te lleva a tu ubicacion, el true se desactiva el boton
+        return false
     }
 
-    //Este metodo se llama cada vez que el usuario pulse su ubicacion
-    override fun onMyLocationClick(p0: Location) {
-
-        // Toast.makeText(this, "Esta es tu ubicacion: ${p0.latitude}, ${p0.longitude}", Toast.LENGTH_SHORT).show() //
+    override fun onMyLocationClick(location: Location) {
+        GuardarUbicacionEnBd(location)
         Toast.makeText(this, "Este eres tu", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Ubicación guardada: ${location.latitude}, ${location.longitude}", Toast.LENGTH_SHORT).show()
     }
+
+    fun GuardarUbicacionEnBd(location: Location) {
+        val lat = location.latitude
+        val lng = location.longitude
+
+        // Obtiene la referencia a la base de datos
+        val database = FirebaseDatabase.getInstance()
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+
+        if (userId != null) {
+            // Crea el mapa con los valores actualizados de latitud y longitud
+            val userLocationMap = mapOf(
+                "latitud" to lat,
+                "longitud" to lng
+            )
+
+            database.reference.child("Usuario").child(userId).child("ubicacion").updateChildren(userLocationMap)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Ubicación actualizada en la base de datos", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Error al actualizar ubicación: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            Toast.makeText(this, "Usuario no autenticado", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 }
 
 

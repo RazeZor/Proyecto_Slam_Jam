@@ -74,6 +74,12 @@
         android:textColor="#555555"
         android:paddingBottom="24dp"/>
 
+    <Button
+        android:id="@+id/BtnInvitar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/black"
+        android:text="Invitar a Tu banda " />
 
 
 </LinearLayout>

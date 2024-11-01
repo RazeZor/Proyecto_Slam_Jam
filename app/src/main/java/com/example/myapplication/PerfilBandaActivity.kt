@@ -66,7 +66,7 @@ class PerfilBandaActivity : AppCompatActivity() {
                         Nombre.text = banda.nombreBanda
                         DescripcionBanda.text = banda.descripcion
                         genero.text = banda.genero
-                        integrantes.text = banda.integrantes.joinToString {","}
+                        obtenerNombresIntegrantes(banda.integrantes)
                     }
                 } else {
                     // Manejar el caso en que no se encuentra la banda
@@ -77,6 +77,30 @@ class PerfilBandaActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun obtenerNombresIntegrantes(ids: List<String>) {
+        val nombres = mutableListOf<String>()
+        val referenceUsuarios = FirebaseDatabase.getInstance().getReference("Usuario")
+        val totalIntegrantes = ids.size
+        var contador = 0
+
+        for (id in ids) {
+            referenceUsuarios.child(id).child("nombre").get().addOnSuccessListener { snapshot ->
+                if (snapshot.exists()) {
+                    val nombre = snapshot.value.toString()
+                    nombres.add(nombre)
+                }
+                contador++
+                if (contador == totalIntegrantes) {
+                    // Todos los nombres han sido recuperados
+                    integrantes.text = "Integrantes: ${nombres.joinToString(", ")}"
+                }
+            }.addOnFailureListener {
+                Toast.makeText(this, "Error al cargar nombres de integrantes", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 
 
 }

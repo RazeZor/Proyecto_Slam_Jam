@@ -41,7 +41,7 @@ class PerfilActivity : AppCompatActivity() {
             // Obtener referencia a la base de datos
             reference = FirebaseDatabase.getInstance().getReference("Usuario").child(id)
 
-            // Leer los datos del perfil desde Firebase
+
             reference.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
@@ -61,11 +61,6 @@ class PerfilActivity : AppCompatActivity() {
                     }
                 }
 
-
-
-
-
-
                 override fun onCancelled(error: DatabaseError) {
                     Toast.makeText(this@PerfilActivity, "Error al cargar los datos", Toast.LENGTH_SHORT).show()
                 }
@@ -79,5 +74,11 @@ class PerfilActivity : AppCompatActivity() {
             val intent = Intent(this,EditarPerfil::class.java)
             startActivity(intent)
         }
+
     }
+
+
+
+
+
 }

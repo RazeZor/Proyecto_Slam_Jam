@@ -63,8 +63,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.firebase.auth.ktx)
     implementation(libs.play.services.location)
-    implementation(libs.androidx.recyclerview)
-
+    implementation("androidx.recyclerview:recyclerview:1.2.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

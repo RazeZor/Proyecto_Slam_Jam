@@ -1,4 +1,5 @@
 package com.example.myapplication
+
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -59,9 +60,12 @@ class CrearBandaActivity : AppCompatActivity() {
     private fun registrarBanda(nombre: String, genero: String, descripcion: String) {
         val bandaId = reference.push().key // Generar un ID único para la banda
         val userId = auth.currentUser?.uid
-        val integrantes = mutableListOf<String>() // Inicialmente esta vacío, luego puedes agregar usuarios
+        val integrantes = ArrayList<String>() // Lista mutable vacía para agregar miembros más tarde
 
         if (bandaId != null && userId != null) {
+            // Agregar el usuario actual como miembro inicial de la banda
+            integrantes.add(userId)
+
             val banda = Banda(bandaId, userId, nombre, genero, descripcion, integrantes)
 
             // Guardar la banda en Firebase
@@ -78,7 +82,7 @@ class CrearBandaActivity : AppCompatActivity() {
     }
 
     private fun seleccionarFoto() {
-        // Implementar selección de imagen
+        // Implementar selección de imagen si es necesario
     }
 
     private fun IniciarVariables() {
@@ -91,4 +95,3 @@ class CrearBandaActivity : AppCompatActivity() {
         reference = FirebaseDatabase.getInstance().getReference("Bandas")
     }
 }
-

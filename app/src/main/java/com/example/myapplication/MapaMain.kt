@@ -3,6 +3,8 @@ package com.example.myapplication
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Location
 import android.os.Bundle
 import android.widget.Toast
@@ -18,6 +20,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -27,6 +30,11 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ChildEventListener
+import android.widget.PopupMenu
+import android.os.Handler
+import android.util.Log
+import androidx.appcompat.app.AlertDialog
+import com.google.firebase.database.DatabaseReference
 
 class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
 
@@ -102,7 +110,57 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClic
         map.setOnMyLocationButtonClickListener(this)
         map.setOnMyLocationClickListener(this)
         observeUsersLocation() // Escucha cambios en la ubicación de los usuarios en tiempo real
+        map.setOnMarkerClickListener { marker ->
+            // Mostrar un menú contextual cuando se hace clic en un marcador
+            VerOpcionesParaElUsuario(marker)
+            true // Indica que has manejado el evento
+        }
     }
+
+    private fun VerOpcionesParaElUsuario(marker: Marker) {
+        val opciones = arrayOf("Invitar a Banda", "Ver Perfil")
+        AlertDialog.Builder(this)
+            .setTitle("Opciones")
+            .setItems(opciones) { _, which ->
+                when (which) {
+                    0 -> {
+                        InvitarABanda(marker)
+                    }
+                    1 -> {
+                        VerPerfil(marker)
+                    }
+                }
+            }
+            .show()
+    }
+
+
+
+    private fun VerPerfil(marker: Marker) {
+        val userId = marker.tag as? String // Obtén el UID desde el tag
+        if (userId != null) {
+            val intent = Intent(this, VerPerfilDeOtros::class.java)
+            intent.putExtra("id", userId)
+            startActivity(intent)
+        } else {
+            Log.d("VerPerfil", "UID no encontrado")
+        }
+    }
+
+
+
+    private fun InvitarABanda(marker: Marker) {
+
+        }
+
+
+
+
+
+    private fun obtenerMisBandas(callback: (List<Banda>) -> Unit) {
+
+    }
+
 
     private fun observeUsersLocation() {
         val database = FirebaseDatabase.getInstance().reference.child("Usuario")
@@ -138,15 +196,31 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClic
         val nombre = snapshot.child("nombre").getValue(String::class.java) ?: "Usuario $userId"
         val userLocation = LatLng(lat, lng)
 
-        // Actualiza el marker del usuario si ya existe
+        // Redimensionar el logo
+        val logoResource = R.drawable.headphone_11712743
+        val originalBitmap = BitmapFactory.decodeResource(resources, logoResource)
+        val resizedBitmap = Bitmap.createScaledBitmap(originalBitmap, 50, 50, false)
+
+        // Verifica si el marcador ya existe para el usuario
         if (userMarkers.containsKey(userId)) {
             userMarkers[userId]?.position = userLocation
         } else {
-            // Crea un nuevo marker para el usuario si no existe
-            val markerOptions = MarkerOptions().position(userLocation).title("Usuario: $nombre")
-            userMarkers[userId] = map.addMarker(markerOptions)!!
+            // Crea un nuevo marcador
+            val markerOptions = MarkerOptions()
+                .position(userLocation)
+                .title(nombre) // Aquí se muestra el nombre del usuario
+                .icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap))
+
+            // Agrega el marcador al mapa y configura el UID en tag
+            val marker = map.addMarker(markerOptions)
+            marker?.tag = userId // Guarda el UID en tag para poder accederlo después
+            userMarkers[userId] = marker!!
         }
+
+        // Libera memoria del bitmap original
+        originalBitmap.recycle()
     }
+
 
     override fun onMyLocationButtonClick(): Boolean {
         return false

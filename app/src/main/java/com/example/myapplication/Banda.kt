@@ -6,5 +6,5 @@ data class Banda(
     val nombreBanda: String = "",
     val genero: String = "",
     val descripcion: String = "",
-    val integrantes: List<String> = emptyList()
+    val integrantes: ArrayList<String> = ArrayList()
 )

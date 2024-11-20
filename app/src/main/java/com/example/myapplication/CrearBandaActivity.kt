@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -71,6 +72,10 @@ class CrearBandaActivity : AppCompatActivity() {
             reference.child(bandaId).setValue(banda).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(this, "Banda creada exitosamente", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, MapaMain::class.java)
+                    intent.putExtra("bandaId", bandaId) // Pasar el ID de la banda creada
+                    startActivity(intent)
+                    finish() // Finalizar el Activity actual
                 } else {
                     Toast.makeText(this, "Error al crear la banda", Toast.LENGTH_SHORT).show()
                 }

@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
@@ -187,6 +188,10 @@ class Registro : AppCompatActivity() {
                     reference.setValue(userMap).addOnCompleteListener { saveTask ->
                         if (saveTask.isSuccessful) {
                             Toast.makeText(applicationContext, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show()
+                            val intento = Intent(this,MainActivity::class.java)
+                            startActivity(intento)
+                            finish() // Cierra la actividad después de guardar
+
                         } else {
                             Toast.makeText(applicationContext, "Error al guardar datos", Toast.LENGTH_SHORT).show()
                         }

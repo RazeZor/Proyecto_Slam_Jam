@@ -159,6 +159,7 @@ class MapaMain : AppCompatActivity(), OnMapReadyCallback, OnMyLocationButtonClic
 
     private fun obtenerMisBandas(callback: (List<Banda>) -> Unit) {
 
+
     }
 
 

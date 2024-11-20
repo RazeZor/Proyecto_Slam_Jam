@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -102,6 +103,8 @@ class EditarPerfil : AppCompatActivity() {
         reference.updateChildren(userMap).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Toast.makeText(this, "Perfil actualizado con éxito", Toast.LENGTH_SHORT).show()
+                val intento = Intent(this,PerfilActivity::class.java)
+                startActivity(intento)
                 finish() // Cierra la actividad después de guardar
             } else {
                 Toast.makeText(this, "Error al actualizar perfil", Toast.LENGTH_SHORT).show()
